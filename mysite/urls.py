@@ -14,8 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from utils.allowed_urls import UrlsWithPermissionsView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('clients/', include(('clients.urls', 'clients'), namespace='clients')),
+    path('inventory/', include(('inventory.urls', 'inventory'), namespace='inventory')),
+    path('student/', include(('student.urls', 'student'), namespace='student')),
+    path('instance/named/url/list/allowed/', UrlsWithPermissionsView.as_view(), name='allowed-urls'),
 ]
