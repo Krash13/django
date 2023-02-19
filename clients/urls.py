@@ -8,11 +8,11 @@ Urls:
 from django.urls import path
 from .views.login import LoginForClientSystem
 from .views.registration import RegistrationStudentView
-from .views.logout import LogoutForClientSystem
+from .views.selector import StudentSelectorView
 
 
 urlpatterns = [
     path('login/', LoginForClientSystem.as_view()),
     path('registration/student/', RegistrationStudentView.as_view()),
-    # path('logout/', LoginForClientSystem.as_view())
+    path('selector/student/', StudentSelectorView.as_view()),
 ]

@@ -3,8 +3,10 @@ from clients.permissions import IsTeacherPermission
 from utils.paginations import SelectorPagination
 from utils.serializers import MultiSerializerViewSet, ACTIONS
 from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 from ..models.reagents import Reagents, WorkReagents
 from ..models.choices import UnitsType
 from ..serializers.reagents import BaseReagentsSerializer, \
@@ -102,3 +104,21 @@ class WorkReagentsModelViewSet(
             work__id=self.kwargs.get('work_id')
         )
         return qs
+
+
+class UnitsTypeView(APIView):
+    choices = UnitsType.choices
+    permission_classes = [AllowAny, ]
+
+    def get_choices_data(self):
+        result = []
+        for choice in self.choices:
+            result.append({'value': choice[0], 'text': choice[1]})
+        return result
+
+    def get(self, request, *args, **kwargs):
+        data = self.get_choices_data()
+        if len(data) > 0:
+            return Response(data=data, status=status.HTTP_200_OK)
+        else:
+            return Response(data={'choices': 'No have data'}, status=status.HTTP_400_BAD_REQUEST)
